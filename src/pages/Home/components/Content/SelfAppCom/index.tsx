@@ -9,10 +9,22 @@ interface SelfAppComType {
   props: []; //入口列表
 }
 const BannerCom: React.FC<SelfAppComType> = () => {
-  const [dataSource, setDataSource] = useState<IApplication[]>([]);
+  const [myApps, setMyApps] = useState<IApplication[]>([]);
+  const [shareApps, setShareApps] = useState<IApplication[]>([]);
+
+
   useEffect(() => {
     const id = orgCtrl.subscribe(() => {
-      loadApps().then((apps) => setDataSource(apps));
+      loadApps().then((apps) => setMyApps(apps));
+    });
+    return () => {
+      orgCtrl.unsubscribe(id);
+    };
+  }, []);
+
+  useEffect(() => {
+    const id = orgCtrl.subscribe(() => {
+      loadShareApps().then((apps) => setShareApps(apps));
     });
     return () => {
       orgCtrl.unsubscribe(id);
@@ -26,14 +38,42 @@ const BannerCom: React.FC<SelfAppComType> = () => {
     }
     return apps.filter((a, i) => apps.findIndex((x) => x.id === a.id) === i);
   };
+  
+  const loadShareApps = async () => {
+    const apps: IApplication[] = [];
+    for (const target of orgCtrl.targets) {
+      apps.push(...(await target.directory.loadAllApplication()));
+    }
+    return apps.filter((a, i) => apps.findIndex((x) => x.id === a.id) !== i);
+  };
   return (
+    <>
     <CardWidthTitle className="self-app">
-      <div className="app-content">
-        {dataSource.map((item, index) => {
-          return <AppCard className="app-wrap" key={index} app={item} />;
-        })}
-      </div>
-    </CardWidthTitle>
+        <h3 className='app-title'>常用应用</h3>
+        <div className="app-content">
+          {shareApps.map((item, index) => {
+            return <AppCard className="app-wrap" key={index} app={item} />;
+          })}
+        </div>
+      </CardWidthTitle>
+      <CardWidthTitle className="self-app">
+        <h3 className='app-title'>我的应用</h3>
+        <div className="app-content">
+          {myApps.map((item, index) => {
+            return <AppCard className="app-wrap" key={index} app={item} />;
+          })}
+        </div>
+      </CardWidthTitle>
+
+      <CardWidthTitle className="self-app">
+        <h3 className='app-title'>共享应用</h3>
+        <div className="app-content">
+          {shareApps.map((item, index) => {
+            return <AppCard className="app-wrap" key={index} app={item} />;
+          })}
+        </div>
+      </CardWidthTitle>
+    </>
   );
 };
 const AppCard: any = ({ className, app }: { className: string; app: IApplication }) => {
