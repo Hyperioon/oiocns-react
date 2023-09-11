@@ -20,10 +20,8 @@ const FormSetting: React.FC<FormSettingType> = ({ current, schemaRef }) => {
     if (ruleInfo?.schema) {
       const { column, displayType, labelWidth } = ruleInfo?.schema || defConfig;
       form.setFieldsValue({ column, displayType, labelWidth });
-
       return;
     }
-
     form.setFieldsValue(defConfig);
   }, []);
 
@@ -35,6 +33,7 @@ const FormSetting: React.FC<FormSettingType> = ({ current, schemaRef }) => {
     const OriScame = schemaRef?.current?.getValue();
     schemaRef?.current?.setValue({ ...OriScame, ...changeVal });
     const ruleInfo = JSON.parse(current.metadata.rule || '{}');
+    console.log('ruleInfo1',ruleInfo)
     current.update({
       ...current.metadata,
       rule: JSON.stringify({

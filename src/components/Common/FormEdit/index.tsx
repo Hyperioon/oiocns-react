@@ -40,13 +40,15 @@ const FormEditModal: React.FC<IProps> = ({
 
   // 创建ref
   const myComponentRef: any = useRef(null);
-  const onFormSchemaChange = (e: schemaType) => {
+  const onFormSchemaChange = (schema: schemaType) => {
+    // 更新设计器中schema，避免fieldWrapperRender方法中取到原来的缓存节点
+    myComponentRef.current.setValue(schema);
     const ruleInfo = JSON.parse(current.metadata.rule || '{}');
     current.update({
       ...current.metadata,
       rule: JSON.stringify({
         ...ruleInfo,
-        schema: e,
+        schema,
       }),
     });
   };
@@ -54,7 +56,7 @@ const FormEditModal: React.FC<IProps> = ({
   //页面重载获取默认schema或者配置后的schema
 
   const onClickDelete = async (e: any) => {
-    const id = e?.$id?.replace('#/', '');
+    const id = e?.$id?.split('/')?.at(-1);
     const attr = current.attributes.find((item) => item.id === id);
     // 删除的是特性组件
     if (attr) {
@@ -75,13 +77,9 @@ const FormEditModal: React.FC<IProps> = ({
         const toDelAttrs = current.attributes.filter((item) =>
           toDelAttrIds.includes(item.id),
         );
-        const toDelAttrFns: Promise<boolean>[] = toDelAttrs.reduce((pre, cur) => {
-          pre.push(current.deleteAttribute(cur));
-          return pre;
-        }, [] as Promise<boolean>[]);
-        // console.log('toDelAttrs', toDelAttrs);
-        // console.log('toDelAttrFns', toDelAttrFns);
-        if (toDelAttrFns.length) await Promise.all(toDelAttrFns);
+        for (let i = 0; i < toDelAttrs.length; i++) {
+          await current.deleteAttribute(toDelAttrs[i]);
+        }
       }
       return true;
     }
@@ -213,17 +211,18 @@ const FormEditModal: React.FC<IProps> = ({
           settings={setting}
           commonSettings={{}}
           ref={myComponentRef}
-          onCanvasSelect={(v) => console.log(v)}
+          onCanvasSelect={(v) => console.log('~!~~~onCanvasSelect', v)}
           fieldWrapperRender={(schema, isSelected, _children, originNode) => {
-            if (isSelected && selectedItem.title !== schema.title) {
+            if (isSelected && selectedItem.$id !== schema.$id) {
               /* 收集当前选中项 */
+              console.log('~!~~~schema', schema);
               setSelectedItem(schema);
             }
             return originNode;
           }}>
           <div className="fr-generator-container">
             <div style={{ width: '280px' }}>
-              <Sidebar fixedName />
+              <Sidebar />
             </div>
             <Resizable
               handles={'right'}

@@ -1,4 +1,11 @@
 import { loadRegexpOpts, loadWidgetsOpts } from '../rule';
+const ColumnEnum = {
+  1: { text: '一列' },
+  2: { text: '二列' },
+  3: { text: '三列' },
+  4: { text: '四列' },
+
+};
 const BoolEnum = {
   true: { text: '是' },
   false: { text: '否' },
@@ -17,7 +24,7 @@ const columns: any = (type: string) => {
         md: 12,
       },
       title: '标题',
-      dataIndex: 'name',
+      dataIndex: 'title',
       valueType: 'text',
       tooltip: '',
     },
@@ -29,8 +36,20 @@ const columns: any = (type: string) => {
       title: '标签宽度',
       width: '100%',
       dataIndex: 'labelWidth',
+      initialValue: 120,
       valueType: 'digit',
       tooltip: '',
+    },
+    {
+      colProps: {
+        xs: 12,
+        md: 12,
+      },
+      title: '元素宽度',
+      width: '100%',
+      dataIndex: 'width',
+      initialValue: '100%',
+      valueType: 'text',
     },
     {
       colProps: {
@@ -172,6 +191,26 @@ const ObjectColumns = [
     dataIndex: 'theme',
     valueType: 'radio',
     valueEnum: flexEnum,
+  },
+  {
+    colProps: {
+      xs: 12,
+      md: 12,
+    },
+    title: '标题',
+    dataIndex: 'title',
+    valueType: 'text',
+    tooltip: '',
+  },
+  {
+    colProps: {
+      xs: 24,
+      md: 24,
+    },
+    title: '一行多列',
+    dataIndex: 'column',
+    valueType: 'radioButton',
+    valueEnum: ColumnEnum,
   },
   {
     valueType: 'dependency',
