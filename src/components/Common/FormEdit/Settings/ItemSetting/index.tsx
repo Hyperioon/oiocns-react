@@ -35,6 +35,10 @@ const AttributeConfig = ({ current, schemaRef, selectedFiled }: IProps) => {
       ...rule,
       title: selectedFiled.title ?? selectedFiled.name,
     };
+<<<<<<< HEAD
+=======
+    // console.log(values);
+>>>>>>> 12b18e0eaf0b7c59ada17c968cf4a948cbb55021
     formRef?.current?.setFieldsValue(values);
   }, [selectedFiled]);
 
@@ -52,9 +56,11 @@ const AttributeConfig = ({ current, schemaRef, selectedFiled }: IProps) => {
       selectedFiled.rule = selectedFiled.rule || '{}';
       console.log('changedValues2',schemaRef.current.getValue())
       const rule = { ...JSON.parse(selectedFiled.rule), ...changedValues };
+      console.log('selectedFiled', selectedFiled);
       /* 更新保存数据 */
       const attrData = {
         ...selectedFiled,
+<<<<<<< HEAD
         name: rule.title ?? selectedFiled.name,
         rule: JSON.stringify(rule),
       };
@@ -62,12 +68,27 @@ const AttributeConfig = ({ current, schemaRef, selectedFiled }: IProps) => {
       console.log('attrData',attrData)
       current.updateAttribute(attrData);
       const schema = updateSchemaById(
+=======
+        name: selectedFiled.title ?? selectedFiled.name,
+        rule: JSON.stringify(rule),
+      };
+      // delete attrData.$id
+      current.updateAttribute(attrData);
+      const resultScame = updateSchemaById(
+>>>>>>> 12b18e0eaf0b7c59ada17c968cf4a948cbb55021
         selectedFiled?.$id as string,
         schemaRef.current.getValue(),
         changedValues,
       );
+<<<<<<< HEAD
       // 更新schema
       schemaRef.current.setValue(schema);
+=======
+      // console.log('resultScame', resultScame);
+      // debugger;
+      /* 更新schma展示数据 */
+      schemaRef.current.setValue(resultScame);
+>>>>>>> 12b18e0eaf0b7c59ada17c968cf4a948cbb55021
       const ruleInfo = JSON.parse(current.metadata.rule || '{}');
       current.update({
         ...current.metadata,

@@ -202,16 +202,18 @@ const ObjectColumns = [
     valueType: 'text',
     tooltip: '',
   },
-  {
-    colProps: {
-      xs: 24,
-      md: 24,
-    },
-    title: '一行多列',
-    dataIndex: 'column',
-    valueType: 'radioButton',
-    valueEnum: ColumnEnum,
-  },
+  // <<<<<<< HEAD
+  //     colProps: {
+  //       xs: 24,
+  //       md: 24,
+  //     },
+  //     title: '一行多列',
+  //     dataIndex: 'column',
+  //     valueType: 'radioButton',
+  //     valueEnum: ColumnEnum,
+  //   },
+  //   {
+  // =======
   {
     valueType: 'dependency',
     name: ['theme'],
