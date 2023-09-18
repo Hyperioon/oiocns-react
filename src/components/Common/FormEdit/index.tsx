@@ -6,6 +6,8 @@ import { IForm } from '@/ts/core';
 import MyDivider from './widgets/Divider';
 import MySpace from './widgets/Space';
 import ProFormPerson from './widgets/ProFormPerson';
+import ProFormDept from './widgets/ProFormDept';
+
 import { SchemaType } from '@/ts/base/model';
 import PageSetting from './Settings';
 import { Resizable } from 'devextreme-react';
@@ -154,6 +156,20 @@ const FormEditModal: React.FC<IProps> = ({
       },
     },
     {
+      text: '部门',
+      name: 'ProFormDept',
+      schema: {
+        title: '部门',
+        type: 'string',
+        widget: 'ProFormDept',
+        metadata: current.metadata,
+      },
+      setting: {
+        // children: { title: '嵌套的标题', type: 'string' },
+        // dashed: { title: '是否虚线', type: 'boolean' },
+      },
+    },
+    {
       text: '间距',
       name: 'space',
       schema: {
@@ -207,7 +223,13 @@ const FormEditModal: React.FC<IProps> = ({
           ]}
           canDelete={onClickDelete}
           controlButtons={[true, false]}
-          widgets={{ MyDivider, MySpace, ProFormPerson, person: ProFormPerson }}
+          widgets={{
+            MyDivider,
+            MySpace,
+            ProFormPerson,
+            ProFormDept,
+            person: ProFormPerson,
+          }}
           settings={setting}
           commonSettings={{}}
           ref={myComponentRef}

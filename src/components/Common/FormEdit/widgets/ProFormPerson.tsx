@@ -45,6 +45,7 @@ const ProFormPerson = (props: IProps) => {
       // label={props.schema.title}
       width={200}
       fieldProps={{
+        showSearch: true,
         ...{ options },
         ...{ filterOption },
         ...{ filterSort },
