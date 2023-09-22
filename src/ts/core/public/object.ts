@@ -7,6 +7,7 @@ export class XObject<T extends schema.Xbase> {
   private _cache: T | undefined;
   private _objName: string;
   private _target: schema.XTarget;
+
   private _relations: string[];
   private _methods: { [name: string]: ((...args: any[]) => void)[] };
   constructor(target: schema.XTarget, name: string, relations: string[]) {
@@ -66,6 +67,7 @@ export class XObject<T extends schema.Xbase> {
         operation: 'replaceAll',
       },
     );
+    console.log('res123',res)
     if (res.success) {
       if (this._cache === undefined) {
         this._cache = await this.get<T>('');

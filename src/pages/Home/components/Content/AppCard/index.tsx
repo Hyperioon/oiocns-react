@@ -19,8 +19,8 @@ const AppCard: React.FC<{
               className="app-box"
               key={index}
               onClick={() => {
+                item.cacheCommonApplications(item);
                 item.loadWorks().then(() => {
-                  console.log('item',item);return
                   orgCtrl.currentKey = item.key;
                   history.push('/store');
                 });
@@ -32,6 +32,11 @@ const AppCard: React.FC<{
             </div>
           );
         })}
+        {props.dataSource.length === 0 && (
+          <div className="app-box">
+            <span className="app-info-name">暂无数据</span>
+          </div>
+        )}
       </div>
     </>
   );

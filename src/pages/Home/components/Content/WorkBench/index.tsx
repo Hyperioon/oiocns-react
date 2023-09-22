@@ -55,7 +55,7 @@ const BannerCom: React.FC<WorkBenchType> = () => {
   ];
   useEffect(() => {
     const id = orgCtrl.subscribe(() => {
-      loadApps().then((apps) => setMyApplications(apps));
+      loadApps();
     });
     return () => {
       orgCtrl.unsubscribe(id);
@@ -67,7 +67,12 @@ const BannerCom: React.FC<WorkBenchType> = () => {
     for (const target of orgCtrl.targets) {
       apps.push(...(await target.directory.loadAllApplication()));
     }
-    return apps.filter((a, i) => apps.findIndex((x) => x.id == a.id) == i);
+    console.log('orgCtrl.user.cacheObj.cache.commonApplications',orgCtrl.user.cacheObj.cache.commonApplications)
+    setCommonApplications(orgCtrl.user.cacheObj.cache.commonApplications);
+    setMyApplications(apps.filter((a, i) => apps.findIndex((x) => x.id === a.id) === i));
+    setShareApplications(
+      apps.filter((a, i) => apps.findIndex((x) => x.id !== a.id) === i),
+    );
   };
   return (
     <div className="self-app">
@@ -77,9 +82,9 @@ const BannerCom: React.FC<WorkBenchType> = () => {
           return <EntrysCard className="icon-wrap" key={index} menu={item} />;
         })}
       </div>
-      <AppCard title="常用应用" dataSource={myApplications} />;
-      <AppCard title="我的应用" dataSource={myApplications} />;
-      <AppCard title="共享应用" dataSource={myApplications} />;
+      <AppCard title="常用应用" dataSource={commonApplications} />
+      <AppCard title="我的应用" dataSource={myApplications} />
+      <AppCard title="共享应用" dataSource={shareApplications} />
     </div>
   );
 };
@@ -88,8 +93,7 @@ const EntrysCard: any = ({ className, menu }: { className: string; menu: IMune }
     <div
       className={`${className}`}
       onClick={() => {
-        console.log('menu', menu);
-        command.emitter('config', menu.cmd, '');
+        command.emitter('config', menu.cmd, orgCtrl.user);
       }}>
       <img className="app-icon" src={`/img/icon/${menu.iconType}.png`} alt="" />
       <div className="app-info">
